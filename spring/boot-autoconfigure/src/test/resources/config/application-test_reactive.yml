@@ -1,0 +1,17 @@
+server:
+  address: 127.0.0.1
+  ssl:
+    # Armeria will use a self-signed certificate when there's no keystore configuration.
+    enabled: true
+
+
+armeria:
+  ports:
+    - port: 0
+      protocol: HTTP
+    - ip: 127.0.0.1
+      port: 0
+      protocol: HTTP
+    - ip: 0.0.0.0
+      port: 0
+      protocol: HTTP

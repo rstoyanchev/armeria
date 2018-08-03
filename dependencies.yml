@@ -184,6 +184,9 @@ javax.inject:
 javax.validation:
   validation-api: { version: '2.0.1.Final' }
 
+javax.servlet:
+  javax.servlet-api: { version: '4.0.1' }
+
 junit:
   junit:
     version: '4.12'
@@ -369,7 +372,9 @@ org.springframework.boot:
     javadocs:
     - https://docs.spring.io/spring/docs/current/javadoc-api/
   spring-boot-starter-actuator: { version: *SPRING_BOOT_VERSION }
+  spring-boot-starter-reactor-netty: { version: *SPRING_BOOT_VERSION }
   spring-boot-starter-test: { version: *SPRING_BOOT_VERSION }
   spring-boot-starter-web: { version: *SPRING_BOOT_VERSION }
+  spring-boot-starter-webflux: { version: *SPRING_BOOT_VERSION }
   spring-boot-configuration-processor: { version: *SPRING_BOOT_VERSION }
   spring-boot-gradle-plugin: { version: *SPRING_BOOT_VERSION }

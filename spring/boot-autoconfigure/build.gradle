@@ -1,3 +1,16 @@
+configurations {
+    // Exclude the default tomcat web server from spring-boot-starter-web.
+    testCompile.exclude module: 'spring-boot-starter-tomcat'
+    // Exclude the default netty web server from spring-boot-starter-webflux.
+    testCompile.exclude module: 'spring-boot-starter-reactor-netty'
+
+    // For shadedTest, exclude tomcat, reactor-netty and jetty modules.
+    shadedTestRuntime.exclude module: 'spring-boot-starter-tomcat'
+    shadedTestRuntime.exclude module: 'spring-boot-starter-reactor-netty'
+    shadedTestRuntime.exclude group: 'org.eclipse.jetty', module: 'jetty-webapp'
+    shadedTestRuntime.exclude group: 'org.eclipse.jetty.http2', module: 'http2-server'
+}
+
 dependencies {
     compile(project(':thrift')) {
         ext.optional = true // To let a user choose between thrift and thrift0.9.
@@ -7,10 +20,30 @@ dependencies {
     compile 'io.micrometer:micrometer-registry-prometheus'
     compile 'io.dropwizard.metrics:metrics-json'
     compile 'javax.inject:javax.inject'
+    compile 'javax.servlet:javax.servlet-api'
     compile 'javax.validation:validation-api'
-    compile 'org.springframework.boot:spring-boot-starter'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
+
+    compileOnly 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.springframework.boot:spring-boot-starter-webflux'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'org.hibernate.validator:hibernate-validator'
+
+    testCompile 'org.springframework.boot:spring-boot-starter-web'
+    testCompile 'org.springframework.boot:spring-boot-starter-webflux'
 }
+
+// Copy common files from boot1-autoconfigure module to gen-src directory in order to use them as a source set.
+task copyFiles(type: Copy) {
+    from "${rootProject.projectDir}/spring/boot1-autoconfigure/src/main/java"
+    into "${project.ext.genSrcDir}/main/java"
+    include '**/*RegistrationBean.java'
+    include '**/ArmeriaConfigurationUtil.java'
+    include '**/ArmeriaServerConfigurator.java'
+    include '**/ArmeriaSettings.java'
+    include '**/MeterIdPrefixFunctionFactory.java'
+    include '**/ThriftServiceUtils.java'
+}
+
+tasks.compileJava.dependsOn(copyFiles)
